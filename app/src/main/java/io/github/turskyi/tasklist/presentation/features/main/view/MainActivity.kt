@@ -61,13 +61,15 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
                 return false
             }
 
-            /* Called when a user swipes left or right on a ViewHolder */
+            /* Called when a user swipes left or right on a ViewHolder. */
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                /* implementation of swipe to delete */
+                /* Implementation of swipe to delete. */
                 AppExecutors.instance?.diskIO()?.execute {
                     val position = viewHolder.adapterPosition
                     val tasks: List<TaskEntry>? = mAdapter?.tasks
-                    mDb?.taskDao()?.deleteTask(tasks?.get(position))
+                    if (tasks != null) {
+                        mDb?.taskDao()?.deleteTask(tasks[position])
+                    }
                 }
             }
         }).attachToRecyclerView(mRecyclerView)
@@ -96,9 +98,9 @@ class MainActivity : AppCompatActivity(), ItemClickListener {
 
     private fun setupViewModel() {
         val viewModel: MainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.tasks?.observe(this, { taskEntries ->
+        viewModel.tasks?.observe(this) { taskEntries ->
             Log.d(TAG, "Updating list of tasks from LiveData in ViewModel")
             mAdapter?.tasks = taskEntries
-        })
+        }
     }
 }

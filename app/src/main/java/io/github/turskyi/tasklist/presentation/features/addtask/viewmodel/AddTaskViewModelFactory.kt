@@ -6,7 +6,7 @@ import io.github.turskyi.tasklist.database.AppDatabase
 
 class AddTaskViewModelFactory(private val mDb: AppDatabase, private val mTaskId: Int) :
     NewInstanceFactory() {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
         return AddTaskViewModel(mDb, mTaskId) as T
     }
